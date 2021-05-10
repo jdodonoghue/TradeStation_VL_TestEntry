@@ -18,9 +18,8 @@ method void AnalysisTechnique_Initialized( elsystem.Object sender, elsystem.Init
 begin
 	If barNumber = 1 then
   		Cleardebug(); 
-	
+	dataList = new Vector();
 	BuildVLList();
-	
 end;
 
 method void BuildVLList()
@@ -37,10 +36,8 @@ Begin
 	
 	for cnt = 0 to objectCount - 1  
 	Begin
-		//print("+++++++++++++++++++++++++++++++++");
   		myVLine = DrawingObjects.Items[MyObjects][cnt] astype VerticalLine ;
   		myVLine.ShowTime = true;
-  		//print("myVLine ", myVLine.Position.ToString());
   		
   		If myVLine.Color = elsystem.drawing.Color.Red Then
   		Begin
@@ -53,10 +50,11 @@ Begin
 			End;	
   		End;
   	End; 
-	//print("lst ", lst);
-	lst = lst.Substring(0, lst.Length - 1);
-	
-	dataList = lst.Split("|"); 
+	if lst.Length > 0 Then
+	Begin
+		lst = lst.Substring(0, lst.Length - 1);
+		dataList = lst.Split("|"); 
+	end;
 End;  
 	 
 method bool findVL(string inputValue)
@@ -92,7 +90,5 @@ Begin
 	Begin
 		Sell Short next Bar Low[0] - sellOffset Stop;
 	End;
-	
-	
 End;
 	
