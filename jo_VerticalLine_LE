@@ -6,6 +6,7 @@ using tsdata.marketdata;
 using elsystem.drawing; 
 using elsystem.drawingobjects;
 using elsystem.collections; 
+
 input: buyOffset(0.25);
 
 var: Vector dataList(null);
@@ -17,13 +18,12 @@ method void AnalysisTechnique_Initialized( elsystem.Object sender, elsystem.Init
 Begin
 	If barNumber = 1 then
   		Cleardebug(); 
-	
+	dataList = new Vector();
 	BuildVLList();
 End;
 
-
 method void BuildVLList()
-vars: Vector myVectorObj, VerticalLine myVLine, int cnt, int objectCount, int MyObjects, string lst, string vlPos, string sDate;
+vars: VerticalLine myVLine, int cnt, int objectCount, int MyObjects, string lst, string vlPos, string sDate;
 Begin
 	MyObjects = ObjectCategory.VerticalLineCreatedByDrawingObject;
 	objectCount = DrawingObjects.Items[MyObjects].Count;
@@ -33,13 +33,11 @@ Begin
 		dataList = new Vector();
 		return;  
 	end;
-	print("LE made it");
+	
 	for cnt = 0 to objectCount - 1  
 	Begin
-		//print("+++++++++++++++++++++++++++++++++");
   		myVLine = DrawingObjects.Items[MyObjects][cnt] astype VerticalLine ;
   		myVLine.ShowTime = true;
-  		//print("myVLine ", myVLine.Position.ToString());
   		
   		If myVLine.Color = elsystem.drawing.Color.Green Then
   		Begin
@@ -52,10 +50,11 @@ Begin
 			End;	
   		End;
 	End; 
-	
-	lst = lst.Substring(0, lst.Length - 1);
-	
-	dataList = lst.Split("|"); 
+	if lst.Length > 0 Then
+	Begin
+		lst = lst.Substring(0, lst.Length - 1);
+		dataList = lst.Split("|"); 
+	end;
 End;  
 	
 method bool findVL(string inputValue)
